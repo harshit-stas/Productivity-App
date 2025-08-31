@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productivity Tips</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+
+        .tip-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            border-left: 5px solid #667eea;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .tip-text {
+            font-size: 1.2em;
+            line-height: 1.6;
+            color: #555;
+            font-style: italic;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .tip-counter {
+            margin-top: 20px;
+            color: #777;
+            font-size: 0.9em;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .tip-text {
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💡 Productivity Tips</h1>
+        <div class="tip-container">
+            <div class="tip-text" id="tipText">Click the button below to get a random productivity tip!</div>
+        </div>
+        <button class="btn" onclick="showRandomTip()">Get New Tip</button>
+        <div class="tip-counter">
+            <span id="tipCounter">Tips viewed: 0</span>
+        </div>
+    </div>
+
+    <script>
+        const productivityTips = [
+            "Use the Pomodoro Technique: Work for 25 minutes, then take a 5-minute break.",
+            "Start your day by tackling the most challenging task first when your energy is highest.",
+            "Keep a clean and organized workspace to reduce distractions and improve focus.",
+            "Use the two-minute rule: If something takes less than two minutes, do it immediately.",
+            "Batch similar tasks together to minimize context switching and increase efficiency.",
+            "Set specific, measurable goals for each day to maintain direction and motivation.",
+            "Take regular breaks to avoid burnout and maintain consistent performance throughout the day.",
+            "Use time-blocking to allocate specific time slots for different activities and commitments.",
+            "Eliminate or minimize notifications during focused work sessions to maintain deep concentration.",
+            "Practice the 80/20 rule: Focus on the 20% of tasks that deliver 80% of the results.",
+            "Keep a daily journal to reflect on accomplishments and identify areas for improvement.",
+            "Use keyboard shortcuts to speed up common computer tasks and save valuable time.",
+            "Prepare everything the night before to start your day with clarity and purpose.",
+            "Say no to commitments that don't align with your priorities and long-term goals.",
+            "Use templates and checklists for repetitive tasks to ensure consistency and save time.",
+            "Take advantage of your natural energy cycles by scheduling demanding work during peak hours.",
+            "Keep healthy snacks nearby to maintain stable energy levels throughout the workday.",
+            "Use a timer for meetings to keep discussions focused and prevent them from running over.",
+            "Delegate tasks that others can do well, freeing up your time for high-priority activities.",
+            "Review and adjust your productivity system regularly to ensure it continues serving your needs.",
+            "Practice deep breathing or meditation for a few minutes to reset your focus when feeling overwhelmed.",
+            "Create a dedicated workspace that signals to your brain it's time to focus and be productive.",
+            "Use visual cues like color-coding or symbols to quickly identify priority levels and task types.",
+            "Schedule buffer time between meetings and tasks to account for unexpected delays or transitions.",
+            "Keep a running list of ideas and thoughts to capture inspiration without disrupting current work."
+        ];
+
+        let tipCount = 0;
+        let lastTipIndex = -1;
+
+        function showRandomTip() {
+            let randomIndex;
+            
+            // Ensure we don't show the same tip twice in a row
+            do {
+                randomIndex = Math.floor(Math.random() * productivityTips.length);
+            } while (randomIndex === lastTipIndex && productivityTips.length > 1);
+            
+            lastTipIndex = randomIndex;
+            
+            const tipElement = document.getElementById('tipText');
+            const counterElement = document.getElementById('tipCounter');
+            
+            // Add fade out effect
+            tipElement.style.opacity = '0';
+            
+            setTimeout(() => {
+                tipElement.textContent = productivityTips[randomIndex];
+                tipElement.style.opacity = '1';
+                tipElement.classList.add('fade-in');
+                
+                tipCount++;
+                counterElement.textContent = `Tips viewed: ${tipCount}`;
+                
+                // Remove animation class after animation completes
+                setTimeout(() => {
+                    tipElement.classList.remove('fade-in');
+                }, 500);
+            }, 150);
+        }
+
+        // Show initial tip on page load
+        window.addEventListener('load', () => {
+            setTimeout(showRandomTip, 500);
+        });
+
+        // Add keyboard shortcut (spacebar) for new tip
+        document.addEventListener('keydown', (event) => {
+            if (event.code === 'Space' && event.target.tagName !== 'INPUT') {
+                event.preventDefault();
+                showRandomTip();
+            }
+        });
+    </script>
+</body>
+</html>
